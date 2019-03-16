@@ -1,0 +1,56 @@
+spring: 
+  profiles:
+    active: dev
+  application:
+    name: consumer
+  jackson:
+    default-property-inclusion: non-null
+  
+server:
+  port: 8088
+  tomcat:
+      uri-encoding: UTF-8
+            
+management:
+  security:
+    enabled: false
+    
+feign: 
+  hystrix: 
+    enabled: true
+
+logging:
+  config: classpath:logback-boot.xml
+  path: /project/logs/microservice-springcloud/consumer
+    
+info: 
+  app.name: microservice-springcloud
+  company.name: https://spring.io/projects/spring-cloud
+  
+---
+spring:
+  profiles: dev  
+  
+eureka:
+  client: 
+    service-url: 
+      defaultZone: http://127.0.0.1:7001/eureka/
+  instance:
+    instance-id: consumer-01
+    metadata-map:
+      group: springcloud-group
+      version: 1.0
+  
+---
+spring:
+  profiles: test
+
+eureka:
+  client: 
+    service-url: 
+      defaultZone: http://eureka-01:7001/eureka/,http://eureka-02:7001/eureka/
+  instance:
+    instance-id: ${instanceId}
+    prefer-ip-address: true
+    metadata-map:
+      group: springcloud-group

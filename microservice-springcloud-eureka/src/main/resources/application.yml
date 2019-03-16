@@ -1,0 +1,41 @@
+server:
+  port: 7001
+  tomcat:
+    uri-encoding: UTF-8
+    
+spring:
+  profiles:
+    active: dev
+  application:
+    name: eureka
+
+logging:
+  config: classpath:logback-boot.xml
+  path: /project/logs/microservice-springcloud/eureka
+  
+---
+spring:
+  profiles: dev
+ 
+eureka: 
+  instance:
+    instance-id: eureka-01
+  environment: dev
+  client: 
+    registry-fetch-interval-seconds: 30   #Indicates how often(in seconds) to fetch the registry information from the eurekaserver.(Default: 30)
+    register-with-eureka: false
+    fetch-registry: false
+    service-url: 
+      defaultZone: http://127.0.0.1:${server.port}/eureka/
+      
+---
+spring:
+  profiles: test
+ 
+eureka: 
+  instance:
+    instance-id: ${instance-id}
+  environment: ${spring.profiles}
+  client: 
+    service-url: 
+      defaultZone: ${defaultZone}
